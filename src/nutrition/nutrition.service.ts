@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, Inject } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
+import type { Cache } from 'cache-manager';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import * as crypto from 'crypto';
 import * as fs from 'fs';

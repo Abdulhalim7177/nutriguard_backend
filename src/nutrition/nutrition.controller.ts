@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { NutritionService } from './nutrition.service';
+import { NutritionService } from './nutrition.service.js';
 
 class RecommendDto {
   weeklyBudgetNgn: number;
