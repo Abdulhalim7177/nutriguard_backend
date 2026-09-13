@@ -1,0 +1,15 @@
+[
+  { "name": "Beans", "cost_ngn": 150, "unit": "derica", "nutrients": ["Iron", "Protein", "Folate"], "preparation": "Boiled, moimoi, akara" },
+  { "name": "Yakuwa", "cost_ngn": 50, "unit": "bunch", "nutrients": ["Iron", "Vitamin A"], "preparation": "Stew, soup" },
+  { "name": "Alayyahu", "cost_ngn": 50, "unit": "bunch", "nutrients": ["Iron", "Vitamin A"], "preparation": "Stew, soup" },
+  { "name": "Groundnuts", "cost_ngn": 100, "unit": "cup", "nutrients": ["Protein", "Healthy fats"], "preparation": "Soup, roasted, kuli-kuli" },
+  { "name": "Liver", "cost_ngn": 400, "unit": "portion", "nutrients": ["Iron", "B12"], "preparation": "Fried, stew" },
+  { "name": "Eggs", "cost_ngn": 150, "unit": "egg", "nutrients": ["Protein", "Iron"], "preparation": "Boiled, fried" },
+  { "name": "Millet", "cost_ngn": 100, "unit": "cup", "nutrients": ["Energy", "Fiber"], "preparation": "Tuwo, pudding" },
+  { "name": "Sorghum", "cost_ngn": 100, "unit": "cup", "nutrients": ["Energy", "Fiber"], "preparation": "Tuwo, pudding" },
+  { "name": "Dried Fish", "cost_ngn": 300, "unit": "portion", "nutrients": ["Protein", "Iron", "Omega-3"], "preparation": "Stew, soup" },
+  { "name": "Soya Beans", "cost_ngn": 200, "unit": "mudu", "nutrients": ["Protein", "Iron"], "preparation": "Awara, milk" },
+  { "name": "Sweet Potatoes", "cost_ngn": 200, "unit": "tuber", "nutrients": ["Vitamin A", "Energy"], "preparation": "Boiled, fried" },
+  { "name": "Moringa (Zogale)", "cost_ngn": 50, "unit": "bunch", "nutrients": ["Iron", "Calcium", "Vitamin C"], "preparation": "Salad, soup" },
+  { "name": "Baobab leaves (Kuka)", "cost_ngn": 100, "unit": "measure", "nutrients": ["Vitamin C", "Calcium"], "preparation": "Miyan kuka" }
+]
