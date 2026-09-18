@@ -39,14 +39,14 @@ export class NutritionService {
 
     const prompt = `
 You are a nutrition assistant for NutriGuard in Kano, Nigeria.
-Given a weekly budget of ${weeklyBudgetNgn} NGN and reported symptoms: [${symptoms.join(', ')}], generate a 5-day meal plan.
+Given a weekly budget of ${weeklyBudgetNgn} NGN and reported symptoms: [${symptoms.join(', ')}], generate a 3-day meal plan.
 Dietary notes: ${dietSummary}
 
 CRITICAL RULES:
 1. You MUST ONLY use foods from this local food database:
 ${JSON.stringify(this.foodDb, null, 2)}
 2. Do NOT mention any food that is not in the database.
-3. The total estimated cost of all 5 days must NOT exceed ${weeklyBudgetNgn} NGN.
+3. The total estimated cost of all 3 days must NOT exceed ${weeklyBudgetNgn} NGN.
 4. If the budget is very low (e.g. 200 NGN), provide extremely cheap options like just Kuka soup or just boiled beans to stay under budget. DO NOT EXCEED THE BUDGET.
 5. Provide a brief explanation of why these foods were chosen based on the symptoms.
 
@@ -67,31 +67,36 @@ Respond ONLY with valid JSON exactly matching this schema:
 `;
 
     let parsed: any;
-    if (process.env.NODE_ENV === 'test' || process.env.GEMINI_API_KEY === 'dummy_key' || !process.env.GEMINI_API_KEY) {
-      let mockCost = Math.min(weeklyBudgetNgn, 150 * 5);
+    let useMock = false;
+
+    if (process.env.NODE_ENV === 'test' || !process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY.includes('dummy')) {
+      useMock = true;
+    } else {
+      try {
+        const model = this.genAI.getGenerativeModel({ model: "gemini-3.7-flash", generationConfig: { responseMimeType: "application/json" } });
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
+        parsed = JSON.parse(responseText);
+      } catch (e: any) {
+        console.error("Gemini API Failed, falling back to mock:", e.message || String(e));
+        useMock = true;
+      }
+    }
+
+    if (useMock) {
+      let mockCost = Math.min(weeklyBudgetNgn, 150 * 3);
       if (weeklyBudgetNgn < 750) mockCost = weeklyBudgetNgn;
       
       parsed = {
         weekly_budget_ngn: weeklyBudgetNgn,
         focus: 'iron_rich',
         meal_plan: [
-          { day: "Monday", meal: "Beans", est_cost_ngn: mockCost / 5, key_nutrients: ["Iron"] },
-          { day: "Tuesday", meal: "Beans", est_cost_ngn: mockCost / 5, key_nutrients: ["Iron"] },
-          { day: "Wednesday", meal: "Beans", est_cost_ngn: mockCost / 5, key_nutrients: ["Iron"] },
-          { day: "Thursday", meal: "Beans", est_cost_ngn: mockCost / 5, key_nutrients: ["Iron"] },
-          { day: "Friday", meal: "Beans", est_cost_ngn: mockCost / 5, key_nutrients: ["Iron"] }
+          { day: "Monday", meal: "Beans", est_cost_ngn: mockCost / 3, key_nutrients: ["Iron"] },
+          { day: "Tuesday", meal: "Beans", est_cost_ngn: mockCost / 3, key_nutrients: ["Iron"] },
+          { day: "Wednesday", meal: "Beans", est_cost_ngn: mockCost / 3, key_nutrients: ["Iron"] }
         ],
         explanation: "Focused on iron-rich, affordable foods given your reported symptoms and budget."
       };
-    } else {
-      const model = this.genAI.getGenerativeModel({ model: "gemini-1.5-pro", generationConfig: { responseMimeType: "application/json" } });
-      const result = await model.generateContent(prompt);
-      const responseText = result.response.text();
-      try {
-        parsed = JSON.parse(responseText);
-      } catch (e) {
-        throw new BadRequestException('AI returned malformed JSON');
-      }
     }
 
     const knownFoodNames = this.foodDb.map(f => f.name.toLowerCase());
